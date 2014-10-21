@@ -4,7 +4,7 @@
 CC = gcc
 
 CFLAGS = -g -std=c99
-LDFLAGS = -lasound
+LDFLAGS = $(shell pkg-config --libs x11 alsa)
 
 OUT = dzvol
 
