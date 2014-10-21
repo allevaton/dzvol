@@ -10,7 +10,6 @@ import ycm_core
 # CHANGE THIS LIST OF FLAGS. YES, THIS IS THE DROID YOU HAVE BEEN LOOKING FOR.
 flags = [
     '-Wall',
-    '-Wextra',
 
     # REQUIRES -std and -x defines the language
     '-x',
