@@ -44,10 +44,11 @@ int main(int argc, char* argv[])
     Screen* screen = DefaultScreenOfDisplay(xdisp);
 
     if(X == -1)
-        X = (screen->width/2) - WIDTH;
+        // screw division, bit shift to the right
+        X = (screen->width >> 1) - WIDTH;
 
     if(Y == -1)
-        Y = (screen->height/2) - HEIGHT;
+        Y = (screen->height >> 1) - HEIGHT;
 
     pid_t pid;
     int mypipe[2];
