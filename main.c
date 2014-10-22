@@ -45,11 +45,12 @@ int main(int argc, char* argv[])
     Display* xdisp = XOpenDisplay(NULL);
     Screen* screen = DefaultScreenOfDisplay(xdisp);
 
+    // screw division, bit shift to the right
     if(X == -1)
-        X = (screen->width/2) - (WIDTH/2);
+        X = (screen->width >> 1) - WIDTH;
 
     if(Y == -1)
-        Y = (screen->height/2) - HEIGHT;
+        Y = (screen->height >> 1) - HEIGHT;
 
     char* command = malloc(sizeof(char) * 256);
 
