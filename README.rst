@@ -6,3 +6,8 @@ dzen2 volume monitor inspired by
 
 Alsa mixer volume code obtained from
 `this code <https://code.google.com/p/yjl/source/browse/Miscellaneous/get-volume.c>`_.
+
+Screenshot
+----------
+.. image: https://raw.githubusercontent.com/allevaton/dzvol/master/screenshot.png
+    .alt: dzvol screenshot
