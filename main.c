@@ -209,7 +209,6 @@ int main(int argc, char* argv[])
     time_t current_time = (unsigned)time(NULL);
     time_t stop_time = current_time + SECONDS_DELAY;
 
-    // TODO time sensitive delay, not infinite loop
     while(current_time <= stop_time)
     {
         current_time = (unsigned)time(NULL);
