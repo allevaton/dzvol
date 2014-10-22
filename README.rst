@@ -9,5 +9,5 @@ Alsa mixer volume code obtained from
 
 Screenshot
 ----------
-.. image: https://raw.githubusercontent.com/allevaton/dzvol/master/screenshot.png
-    .alt: dzvol screenshot
+.. image:: screenshot.png
+    :alt: dzvol screenshot
