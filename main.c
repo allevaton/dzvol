@@ -243,7 +243,7 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-void error_close_exit(char *errmsg, int err, snd_mixer_t* h_mixer)
+void error_close_exit(char* errmsg, int err, snd_mixer_t* h_mixer)
 {
     if(err == 0)
         fprintf(stderr, errmsg);
