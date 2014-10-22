@@ -11,9 +11,13 @@ OUT = dzvol
 all: main.o
 
 main.o: main.c
-	$(CC) -o dzvol $(CFLAGS) $(LDFLAGS) $^
+	$(CC) -o $(OUT) $(CFLAGS) $(LDFLAGS) $^
 
 clean:
 	rm -rf *.o $(OUT)
+
+install:
+	cp  $(OUT) /usr/bin
+	chmod +x /usr/bin/$(OUT)
 
 .PHONY: clean
