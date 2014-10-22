@@ -4,7 +4,7 @@
 CC = gcc
 
 CFLAGS = -g -std=c99
-LDFLAGS = $(shell pkg-config --libs x11 alsa)
+LDFLAGS = $(shell pkg-config --libs x11 alsa) -lm
 
 OUT = dzvol
 

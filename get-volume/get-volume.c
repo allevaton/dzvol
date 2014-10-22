@@ -23,34 +23,31 @@ const char *ATTACH = "default";
 const snd_mixer_selem_channel_id_t CHANNEL = SND_MIXER_SCHN_FRONT_LEFT;
 const char *SELEM_NAME = "Master";
 
-void error_close_exit(char *errmsg, int err, snd_mixer_t *h_mixer) {
-    if (err == 0)
+void error_close_exit(char *errmsg, int err, snd_mixer_t* h_mixer)
+{
+    if(err == 0)
         fprintf(stderr, errmsg);
     else
         fprintf(stderr, errmsg, snd_strerror(err));
-    if (h_mixer != NULL)
+
+    if(h_mixer != NULL)
         snd_mixer_close(h_mixer);
+
     exit(EXIT_FAILURE);
 }
 
-int print(long vol, long vol_min, long vol_max, int switch_value)
+void get_volume(int out_volume, int out_switch_value)
 {
-    return printf("%3.0f%% %s\n", 100.0 * vol / vol_max, (switch_value == 1) ? "ON" : "OFF");
-}
+    int err;
+    long vol, vol_min, vol_max;
+    int switch_value;
 
-int main(int argc, char** argv) {
-    long prev_vol = 0;
-    int prev_switch_value = 0;
+    snd_mixer_t* h_mixer;
+    snd_mixer_selem_id_t* sid;
+    snd_mixer_elem_t* elem ;
 
     while(1)
     {
-        int err;
-        long vol;
-        long vol_min, vol_max;
-        int switch_value;
-        snd_mixer_t *h_mixer;
-        snd_mixer_selem_id_t *sid;
-        snd_mixer_elem_t *elem ;
 
         if ((err = snd_mixer_open(&h_mixer, 1)) < 0)
             error_close_exit("Mixer open error: %s\n", err, NULL);
@@ -75,14 +72,13 @@ int main(int argc, char** argv) {
         snd_mixer_selem_get_playback_volume_range(elem, &vol_min, &vol_max);
         snd_mixer_selem_get_playback_switch(elem, CHANNEL, &switch_value);
 
-        if(prev_vol != vol || prev_switch_value != switch_value)
-            printf("%3.0f%% %s\n", 100.0 * vol / vol_max, (switch_value == 1) ? "ON" : "OFF");
-
-        prev_vol = vol;
-        prev_switch_value = switch_value;
+        printf("%3.0f%% %s\n", 100.0 * vol / vol_max, (switch_value == 1) ? "ON" : "OFF");
+        out_volume = vol / vol_max;
+        out_switch_value = switch_value;
 
         snd_mixer_close(h_mixer);
         usleep(50000);
     }
+
     return 0;
 }
