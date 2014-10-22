@@ -34,9 +34,9 @@ char _FG[9];
 // The delay between refreshing mixer values
 unsigned long REFRESH_SPEED = 50000;
 
-const char *ATTACH = "default";
+const char* ATTACH = "default";
 const snd_mixer_selem_channel_id_t CHANNEL = SND_MIXER_SCHN_FRONT_LEFT;
-const char *SELEM_NAME = "Master";
+const char* SELEM_NAME = "Master";
 
 void get_volume(float* vol, int* switch_value);
 
