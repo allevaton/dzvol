@@ -42,6 +42,7 @@ void get_volume(float* vol, int* switch_value);
 
 int main(int argc, char* argv[])
 {
+    // command line arguments {{{
     for(int i = 0; i < argc; i++)
     {
         if(strcmp(argv[i], "-v") == 0 ||
@@ -140,7 +141,8 @@ int main(int argc, char* argv[])
             puts("It DOES, however, allow only ONE instance of itself to be running at a time by creating /tmp/dzvol as a lock.");
             return 0;
         }
-    }
+    } // for
+    // }}}
 
     // Create a file in /tmp/ to see if this was already running
     if(access("/tmp/dzvol", F_OK) == -1)
