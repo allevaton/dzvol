@@ -14,7 +14,6 @@ Screenshot
 Arguments to get this look would be:
 
     dzvol -bg '#222222' -fg '#FFFFFF' -fn 'Deja Vu Sans Mono 12'
-
 Why make *another* one?
 -----------------------
 I use [i3wm](http://i3wm.org/) and have a 1 second refresh rate on my
