@@ -31,12 +31,16 @@ char _FONT[256];
 char _BG[9];
 char _FG[9];
 
+char ICON_TEXT[32] = "♪";
+
 // The delay between refreshing mixer values
 unsigned long REFRESH_SPEED = 50000;
 
 const char* ATTACH = "default";
 const snd_mixer_selem_channel_id_t CHANNEL = SND_MIXER_SCHN_FRONT_LEFT;
 const char* SELEM_NAME = "Master";
+
+char* LOCK_FILE = "/tmp/dzvol";
 
 void get_volume(float* vol, int* switch_value);
 
@@ -50,6 +54,7 @@ int main(int argc, char* argv[])
         {
             puts("dzvol: 1.0");
             puts("Nick Allevato, inspired by bruenig's dvol");
+            remove(LOCK_FILE);
             return 0;
         }
 
@@ -61,9 +66,15 @@ int main(int argc, char* argv[])
             continue;
         }
 
+        if(strcmp(argv[i], "-i") == 0)
+        {
+            strcpy(ICON_TEXT, argv[i+1]);
+            i += 1;
+            continue;
+        }
+
         if(strcmp(argv[i], "-fg") == 0)
         {
-            //FG = argv[i+1];
             strcpy(_FG, argv[i+1]);
             i += 1;
             continue;
@@ -122,6 +133,7 @@ int main(int argc, char* argv[])
 
         if(strcmp(argv[i], "--help") == 0)
         {
+            remove(LOCK_FILE);
             puts("Usage: dzvol [options]");
             puts("Most options are the same as dzen2\n");
             puts("\t-h|--help\tdisplay this message and exit (0)");
@@ -133,6 +145,7 @@ int main(int argc, char* argv[])
             puts("\t-bg\t\tset the background color");
             puts("\t-fg\t\tset the foreground color");
             puts("\t-fn\t\tset the font face; same format dzen2 would accept");
+            puts("\t-i\t\tsets the icon text/character to whatever you want");
             puts("\t-s|--speed\tmicroseconds to poll alsa for the volume");
             puts("\t\t\thigher amounts are slower, lower amounts (<20000) will begin to cause high CPU usage");
             puts("\t\t\tsee `man 3 usleep`");
@@ -145,9 +158,9 @@ int main(int argc, char* argv[])
     // }}}
 
     // Create a file in /tmp/ to see if this was already running
-    if(access("/tmp/dzvol", F_OK) == -1)
+    if(access(LOCK_FILE, F_OK) == -1)
     {
-        FILE* f = fopen("/tmp/dzvol", "w");
+        FILE* f = fopen(LOCK_FILE, "w");
         fprintf(f, "%d", getpid());
         fclose(f);
     }
@@ -221,8 +234,8 @@ int main(int argc, char* argv[])
         if(prev_vol != vol || prev_switch_value != switch_value)
         {
             char* string = malloc(sizeof(char) * 512);
-            sprintf(string, "^pa(+%ldX)♪^pa()  ^r%s(%ldx%ld) ^pa(+%ldX)%3.0f%%^pa()\n",
-                    ltext_x, (switch_value == 1) ? "" : "o",
+            sprintf(string, "^pa(+%ldX)%s^pa()  ^r%s(%ldx%ld) ^pa(+%ldX)%3.0f%%^pa()\n",
+                    ltext_x, ICON_TEXT, (switch_value == 1) ? "" : "o",
                     lround(pbar_max_width * vol), pbar_height, rtext_x, vol*100);
             fprintf(stream, string);
             fflush(stream);
@@ -239,7 +252,7 @@ int main(int argc, char* argv[])
 
     fflush(NULL);
     pclose(stream);
-    remove("/tmp/dzvol");
+    remove(LOCK_FILE);
     return 0;
 }
 

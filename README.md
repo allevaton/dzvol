@@ -14,6 +14,7 @@ Screenshot
 Arguments to get this look would be:
 
     dzvol -bg '#222222' -fg '#FFFFFF' -fn 'Deja Vu Sans Mono 12'
+
 Why make *another* one?
 -----------------------
 I use [i3wm](http://i3wm.org/) and have a 1 second refresh rate on my
@@ -44,4 +45,5 @@ There *are* some custom ones, which I'll go over here:
 |-bg COLOR | Sets the background color. This should be in the same format dzen2 would accept.|
 |-fg COLOR | Sets the foreground color. This should be in the same format dzen2 would accept.|
 |-fn FONT  | Sets the font. This should be in the same format dzen2 would accept.|
+|-i TEXT   | Sets the icon text/character on the left. Defaults to a music note. |
 |-s, --speed | Speed in microseconds to poll ALSA for volume. The higher the value, the slower the polling, the lower the value, the faster the polling. Values below 20000 begin to cause high CPU usage. Defaults to 50000.|
