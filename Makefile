@@ -6,6 +6,7 @@ CC = gcc
 CFLAGS = -g -std=c99
 LDFLAGS = $(shell pkg-config --libs x11 alsa) -lm
 
+INSTALL_PATH = /usr/bin
 OUT = dzvol
 
 all: main.o
@@ -17,7 +18,7 @@ clean:
 	rm -rf *.o $(OUT)
 
 install:
-	cp  $(OUT) /usr/bin
-	chmod +x /usr/bin/$(OUT)
+	cp  $(OUT) $(INSTALL_PATH)
+	chmod +x $(INSTALL_PATH)/$(OUT)
 
 .PHONY: clean
