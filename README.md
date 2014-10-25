@@ -15,6 +15,21 @@ Arguments to get this look would be:
 
     dzvol -bg '#222222' -fg '#FFFFFF' -fn 'Deja Vu Sans Mono 12'
 
+How can I use it?
+-----------------
+Put dzvol wherever you manage your volume keys, whether it's through
+xbindkeys or your WM.
+
+For example, in i3, I would do something like this:
+
+    set $dzvol dzvol -bg '#222222' -fg '#FFFFFF' -fn 'Deja Vu Sans Mono 12' &
+    bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -qD pulse set Master 2%+ unmute && $dzvol
+
+Notice how I make dzvol fork, since it **does not fork on its own**, but it *will*
+only allow one instance of itself running, so you won't flood your screen.
+
+If you don't fork it, you may not be able to continue adjusting volume using the same key.
+
 Why make *another* one?
 -----------------------
 I use [i3wm](http://i3wm.org/) and have a 1 second refresh rate on my
@@ -29,8 +44,8 @@ to the changing volume. I couldn't find any that existed, so I made dzvol.
 
 Command Line Paramters
 ----------------------
-Most command line parameters are similar to that of dzen2, and work the same way.
-Some parameters are sent directly to dzen2 for interpretation.
+Most command line parameters are similar to that of dzen2, and work the same way,
+and most parameters are sent directly *to* dzen2 for interpretation.
 
 There *are* some custom ones, which I'll go over here:
 
