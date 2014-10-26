@@ -44,6 +44,30 @@ char* LOCK_FILE = "/tmp/dzvol";
 
 void get_volume(float* vol, int* switch_value);
 
+void print_usage(void)
+{
+    remove(LOCK_FILE);
+    puts("Usage: dzvol [options]");
+    puts("Most options are the same as dzen2\n");
+    puts("\t-h|--help\tdisplay this message and exit (0)");
+    puts("\t-x X POS\tmove to the X coordinate on your screen, -1 will center (default: -1)");
+    puts("\t-y Y POS\tmove to the Y coordinate on your screen, -1 will center (default: -1)");
+    puts("\t-w WIDTH\tset the width (default: 256)");
+    puts("\t-h HEIGHT\tset the height (default: 32)");
+    puts("\t-d|--delay DELAY  time it takes to exit when volume doesn't change, in seconds (default: 2)");
+    puts("\t-bg\t\tset the background color");
+    puts("\t-fg\t\tset the foreground color");
+    puts("\t-fn\t\tset the font face; same format dzen2 would accept");
+    puts("\t-i\t\tsets the icon text/character to whatever you want");
+    puts("\t-s|--speed\tmicroseconds to poll alsa for the volume");
+    puts("\t\t\thigher amounts are slower, lower amounts (<20000) will begin to cause high CPU usage");
+    puts("\t\t\tsee `man 3 usleep`");
+    puts("\t\t\tdefaults to 50000\n");
+    puts("Note that dzvol does NOT background itself.");
+    puts("It DOES, however, allow only ONE instance of itself to be running at a time by creating /tmp/dzvol as a lock.");
+    exit(EXIT_SUCCESS);
+}
+
 int main(int argc, char* argv[])
 {
     // command line arguments {{{
@@ -55,105 +79,41 @@ int main(int argc, char* argv[])
             puts("dzvol: 1.0");
             puts("Nick Allevato, inspired by bruenig's dvol");
             remove(LOCK_FILE);
-            return 0;
+            exit(EXIT_SUCCESS);
         }
 
-        if(strcmp(argv[i], "-bg") == 0)
-        {
-            //BG = argv[i+1];
-            strcpy(_BG, argv[i+1]);
-            i += 1;
-            continue;
-        }
+        else if(strcmp(argv[i], "-bg") == 0)
+            strcpy(_BG, argv[++i]);
 
-        if(strcmp(argv[i], "-i") == 0)
-        {
-            strcpy(ICON_TEXT, argv[i+1]);
-            i += 1;
-            continue;
-        }
+        else if(strcmp(argv[i], "-i") == 0)
+            strcpy(ICON_TEXT, argv[++i]);
 
-        if(strcmp(argv[i], "-fg") == 0)
-        {
-            strcpy(_FG, argv[i+1]);
-            i += 1;
-            continue;
-        }
+        else if(strcmp(argv[i], "-fg") == 0)
+            strcpy(_FG, argv[++i]);
 
-        if(strcmp(argv[i], "-fn") == 0)
-        {
-            strcpy(_FONT, argv[i+1]);
-            i += 1;
-            continue;
-        }
+        else if(strcmp(argv[i], "-fn") == 0)
+            strcpy(_FONT, argv[++i]);
 
-        if(strcmp(argv[i], "-x") == 0)
-        {
-            X = atoi(argv[i+1]);
-            i += 1;
-            continue;
-        }
+        else if(strcmp(argv[i], "-x") == 0)
+            X = atoi(argv[++i]);
 
-        if(strcmp(argv[i], "-y") == 0)
-        {
-            Y = atoi(argv[i+1]);
-            i += 1;
-            continue;
-        }
+        else if(strcmp(argv[i], "-y") == 0)
+            Y = atoi(argv[++i]);
 
-        if(strcmp(argv[i], "-d") == 0 ||
-           strcmp(argv[i], "--delay") == 0)
-        {
-            SECONDS_DELAY = atoi(argv[i+1]);
-            i += 1;
-            continue;
-        }
+        else if(strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--delay") == 0)
+            SECONDS_DELAY = atoi(argv[++i]);
 
-        if(strcmp(argv[i], "-w") == 0)
-        {
-            WIDTH = atoi(argv[i+1]);
-            i += 1;
-            continue;
-        }
+        else if(strcmp(argv[i], "-w") == 0)
+            WIDTH = atoi(argv[++i]);
 
-        if(strcmp(argv[i], "-h") == 0)
-        {
-            HEIGHT = atoi(argv[i+1]);
-            i += 1;
-            continue;
-        }
+        else if(strcmp(argv[i], "-h") == 0)
+            HEIGHT = atoi(argv[++i]);
 
-        if(strcmp(argv[i], "-s") == 0 ||
-           strcmp(argv[i], "--speed") == 0)
-        {
-            REFRESH_SPEED = atoi(argv[i+1]);
-            i += 1;
-            continue;
-        }
+        else if(strcmp(argv[i], "-s") == 0 || strcmp(argv[i], "--speed") == 0)
+            REFRESH_SPEED = atoi(argv[++i]);
 
-        if(strcmp(argv[i], "--help") == 0)
-        {
-            remove(LOCK_FILE);
-            puts("Usage: dzvol [options]");
-            puts("Most options are the same as dzen2\n");
-            puts("\t-h|--help\tdisplay this message and exit (0)");
-            puts("\t-x X POS\tmove to the X coordinate on your screen, -1 will center (default: -1)");
-            puts("\t-y Y POS\tmove to the Y coordinate on your screen, -1 will center (default: -1)");
-            puts("\t-w WIDTH\tset the width (default: 256)");
-            puts("\t-h HEIGHT\tset the height (default: 32)");
-            puts("\t-d|--delay DELAY  time it takes to exit when volume doesn't change, in seconds (default: 2)");
-            puts("\t-bg\t\tset the background color");
-            puts("\t-fg\t\tset the foreground color");
-            puts("\t-fn\t\tset the font face; same format dzen2 would accept");
-            puts("\t-i\t\tsets the icon text/character to whatever you want");
-            puts("\t-s|--speed\tmicroseconds to poll alsa for the volume");
-            puts("\t\t\thigher amounts are slower, lower amounts (<20000) will begin to cause high CPU usage");
-            puts("\t\t\tsee `man 3 usleep`");
-            puts("\t\t\tdefaults to 50000\n");
-            puts("Note that dzvol does NOT background itself.");
-            puts("It DOES, however, allow only ONE instance of itself to be running at a time by creating /tmp/dzvol as a lock.");
-            return 0;
-        }
+        else if(strcmp(argv[i], "--help") == 0)
+            print_usage();
     } // for
     // }}}
 
