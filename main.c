@@ -71,8 +71,7 @@ void print_usage(void)
 int main(int argc, char* argv[])
 {
     // command line arguments {{{
-    for(int i = 0; i < argc; i++)
-    {
+    for(int i = 1; i < argc; i++)
         if(strcmp(argv[i], "-v") == 0 ||
            strcmp(argv[i], "--version") == 0)
         {
@@ -114,7 +113,6 @@ int main(int argc, char* argv[])
 
         else if(strcmp(argv[i], "--help") == 0)
             print_usage();
-    } // for
     // }}}
 
     // Create a file in /tmp/ to see if this was already running
