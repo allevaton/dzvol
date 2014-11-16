@@ -36,13 +36,13 @@ char ICON_TEXT[32] = "♪";
 // The delay between refreshing mixer values
 unsigned long REFRESH_SPEED = 50000;
 
-const char* ATTACH = "default";
+const char *ATTACH = "default";
 const snd_mixer_selem_channel_id_t CHANNEL = SND_MIXER_SCHN_FRONT_LEFT;
-const char* SELEM_NAME = "Master";
+const char *SELEM_NAME = "Master";
 
-char* LOCK_FILE = "/tmp/dzvol";
+char *LOCK_FILE = "/tmp/dzvol";
 
-void get_volume(float* vol, int* switch_value);
+void get_volume(float *vol, int *switch_value);
 
 void print_usage(void)
 {
@@ -68,7 +68,7 @@ void print_usage(void)
     exit(EXIT_SUCCESS);
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     // command line arguments {{{
     for(int i = 1; i < argc; i++)
@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
     // Create a file in /tmp/ to see if this was already running
     if(access(LOCK_FILE, F_OK) == -1)
     {
-        FILE* f = fopen(LOCK_FILE, "w");
+        FILE *f = fopen(LOCK_FILE, "w");
         fprintf(f, "%d", getpid());
         fclose(f);
     }
@@ -126,8 +126,8 @@ int main(int argc, char* argv[])
         return 0;
 
     // get X and Y
-    Display* xdisp = XOpenDisplay(NULL);
-    Screen* screen = DefaultScreenOfDisplay(xdisp);
+    Display *xdisp = XOpenDisplay(NULL);
+    Screen *screen = DefaultScreenOfDisplay(xdisp);
 
     // screw division, bit shift to the right
     if(X == -1)
@@ -144,7 +144,7 @@ int main(int argc, char* argv[])
     long ltext_x = lround(WIDTH * 0.078);
     long rtext_x = lround(WIDTH * 0.78);
 
-    char* command = malloc(sizeof(char) * 256);
+    char *command = malloc(sizeof(char) * 256);
 
     char BG[24];
     char FG[24];
@@ -169,7 +169,7 @@ int main(int argc, char* argv[])
     sprintf(command, "dzen2 -ta l -x %d -y %d -w %d -h %d %s %s %s", X, Y, WIDTH, HEIGHT,
             BG, FG, FONT);
 
-    FILE* stream = popen(command, "w");
+    FILE *stream = popen(command, "w");
 
     free(command);
 
@@ -191,7 +191,7 @@ int main(int argc, char* argv[])
 
         if(prev_vol != vol || prev_switch_value != switch_value)
         {
-            char* string = malloc(sizeof(char) * 512);
+            char *string = malloc(sizeof(char) * 512);
             sprintf(string, "^pa(+%ldX)%s^pa()  ^r%s(%ldx%ld) ^pa(+%ldX)%3.0f%%^pa()\n",
                     ltext_x, ICON_TEXT, (switch_value == 1) ? "" : "o",
                     lround(pbar_max_width * vol), pbar_height, rtext_x, vol*100);
@@ -214,7 +214,7 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-void error_close_exit(char* errmsg, int err, snd_mixer_t* h_mixer)
+void error_close_exit(char *errmsg, int err, snd_mixer_t *h_mixer)
 {
     if(err == 0)
         fprintf(stderr, errmsg);
@@ -227,32 +227,32 @@ void error_close_exit(char* errmsg, int err, snd_mixer_t* h_mixer)
     exit(EXIT_FAILURE);
 }
 
-void get_volume(float* vol, int* switch_value)
+void get_volume(float *vol, int *switch_value)
 {
     int err;
     long volume, vol_min, vol_max;
 
-    snd_mixer_t* h_mixer;
-    snd_mixer_selem_id_t* sid;
-    snd_mixer_elem_t* elem ;
+    snd_mixer_t *h_mixer;
+    snd_mixer_selem_id_t *sid;
+    snd_mixer_elem_t *elem ;
 
-    if ((err = snd_mixer_open(&h_mixer, 1)) < 0)
+    if((err = snd_mixer_open(&h_mixer, 1)) < 0)
         error_close_exit("Mixer open error: %s\n", err, NULL);
 
-    if ((err = snd_mixer_attach(h_mixer, ATTACH)) < 0)
+    if((err = snd_mixer_attach(h_mixer, ATTACH)) < 0)
         error_close_exit("Mixer attach error: %s\n", err, h_mixer);
 
-    if ((err = snd_mixer_selem_register(h_mixer, NULL, NULL)) < 0)
+    if((err = snd_mixer_selem_register(h_mixer, NULL, NULL)) < 0)
         error_close_exit("Mixer simple element register error: %s\n", err, h_mixer);
 
-    if ((err = snd_mixer_load(h_mixer)) < 0)
+    if((err = snd_mixer_load(h_mixer)) < 0)
         error_close_exit("Mixer load error: %s\n", err, h_mixer);
 
     snd_mixer_selem_id_alloca(&sid);
     snd_mixer_selem_id_set_index(sid, 0);
     snd_mixer_selem_id_set_name(sid, SELEM_NAME);
 
-    if ((elem = snd_mixer_find_selem(h_mixer, sid)) == NULL)
+    if((elem = snd_mixer_find_selem(h_mixer, sid)) == NULL)
         error_close_exit("Cannot find simple element\n", 0, h_mixer);
 
     snd_mixer_selem_get_playback_volume(elem, CHANNEL, &volume);
