@@ -3,7 +3,7 @@
 
 CC = gcc
 
-CFLAGS = -g -std=c99
+CFLAGS = -std=c99
 LDFLAGS = $(shell pkg-config --libs x11 alsa) -lm
 
 INSTALL_PATH = /usr/bin
