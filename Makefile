@@ -12,7 +12,7 @@ OUT = dzvol
 all: main.o
 
 main.o: main.c
-	$(CC) -o $(OUT) $(CFLAGS) $(LDFLAGS) $^
+	$(CC) -o $(OUT) $(CFLAGS) $^ $(LDFLAGS)
 
 clean:
 	rm -rf *.o $(OUT)
